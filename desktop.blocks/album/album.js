@@ -1,15 +1,15 @@
 function Album(options){
-    var self = this;
-    var elem = options.elem;
-    var needGets;
-    var images = {
-        imgs:[],
-        countImages: 0,
-        next:null,
-        links:[]
-    };
-    var getcount = 0,
-        from,
+    var self = this,
+        elem = options.elem,
+        needGets,
+        images = {
+            imgs:[],
+            countImages: 0,
+            next:null,
+            links:[]
+        },
+        getcount = 0,
+       // from,
         loading = false,
         widthwrap,
         first = false,
@@ -27,9 +27,7 @@ function Album(options){
         inProcess = false,
         albumImageWrap = $('.album-image-wrap'),
         albumItem = $('.album-image-list__item'),
-        indexCur = 0,
         control = $('.album__control'),
-        controlCtx = $.proxy(controlCtx, control ),
         mouseWheel = (/Firefox/i.test(navigator.userAgent)) ? 'DOMMouseScroll' : 'mousewheel';
 
     window.localStorageAlias = window.localStorage;
@@ -185,13 +183,9 @@ function Album(options){
     function animationOnClick(index){
         var spaceBefore = index * widthOfMini;
 
-        $('.album-image-wrap').animate( { scrollLeft: spaceBefore - half + 100 }, 400,function(){
+        $('.album-image-wrap').animate( { scrollLeft: spaceBefore - half + 80 }, 400,function(){
             animation = false;
         });
-    };
-
-    function controlCtx(){
-        return $(this);
     };
 
     function setCurrent(indexOfSlide){
@@ -201,7 +195,6 @@ function Album(options){
                 clearInterval(checker);
             }
             animation = true;
-            half = elem.width()/2;
             var that = this;
             thisIndex = $(this).index();
             currentSlide = (typeof indexOfSlide.target == "undefined")? indexOfSlide : thisIndex;
@@ -217,8 +210,7 @@ function Album(options){
                     $('.album__control_type_next').removeClass('album__control_show_yes');
                     break;
                 default:
-                    var newThis = controlCtx()
-                    $( newThis ).each(function( index ) {
+                    control.each(function( index ) {
                         if(!$(this).hasClass('album__control_show_yes')){
                             $(this).addClass('album__control_show_yes');
                         }
@@ -226,13 +218,12 @@ function Album(options){
             };
 
             jqCurrentSlide = $('.album__slide').eq(currentSlide);
-            half = $(window).width()/2;
             $.when(centerSlide(jqCurrentSlide)).pipe(function(){
                 $('.album__loader').removeClass('album__loader_loading_yes');
                 jqCurrentSlide.addClass('album__slide_type_current');
             });
 
-            if(typeof last === "undefined"){
+            if(typeof last == "undefined"){
                 last = $(this);
             } else {
                 last.removeClass('album-image-list__item_type_current');
@@ -240,13 +231,12 @@ function Album(options){
             };
             last = $('.album-image-list__item').eq(currentSlide).addClass('album-image-list__item_type_current');
             animationOnClick(currentSlide);
-            if(typeof lastSlide === "undefined"){
+            if(typeof lastSlide == "undefined"){
                 lastSlide = $('.album__slide').eq(currentSlide).addClass('album__slide_type_current');
             } else {
                 var number = lastSlide.index();
                 lastSlide = $('.album__slide').eq(currentSlide);
                 var out = $('.album__slide').eq(number);
-                half = elem.width()/2;
                 out.fadeOut('slow').removeClass('album__slide_type_current');
             }
         }
